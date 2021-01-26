@@ -5,16 +5,44 @@ from flask_migrate import Migrate
 db = SQLAlchemy()
 migrate = Migrate()
 
+
 class Product(db.Model):
     """
     A product class model
     """
+
     __tablename__ = "products"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(30), nullable=False, unique=True)
     description = db.Column(db.String(100), nullable=False)
 
     def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
+
+class Provider(db.Model):
+    """
+    A product provider class model
+    """
+
+    __tablename__ = "providers"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(30), nullable=False, unique=True)
+    description = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, name, description):
+        """
+        Initialize a provider model object
+        ...
+        Attributes
+        ----------
+        name : str
+            Product's name
+        description : str
+            Product's description
+
+        """
         self.name = name
         self.description = description
 

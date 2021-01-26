@@ -22,26 +22,23 @@ class ProductResource(Resource):
 
     def get(self):
 
-        per_page = 2
+        per_page = 2  # Refatorar para que seja uma configuração global
 
         parser = reqparse.RequestParser()
         parser.add_argument(
             "id",
             type=int,
-            required=False,
-            default=None,
             help="Product id should be a integer",
         )
         parser.add_argument(
             "page",
             type=int,
-            required=False,
             default=1,
             help="Page number should be a integer",
         )
         args = parser.parse_args()
 
-        if not args["id"]:
+        if args["id"] == None:
 
             if args["page"] < 1:
                 args["page"] = 1
@@ -60,7 +57,7 @@ class ProductResource(Resource):
                 "per_page": per_page,
                 "next": query.has_next,
                 "prev": query.has_prev,
-            }
+            }, 200
 
         product = Product.query.get(args["id"])
         if not product:

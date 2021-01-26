@@ -4,6 +4,7 @@ from .ext import database, serializer, admin, language
 from .api import api
 from .blueprints import views
 
+
 def create_app():
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///precify.db"
