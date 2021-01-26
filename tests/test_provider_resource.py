@@ -67,19 +67,25 @@ def test_providers_post_should_return_400_bad_request(client):
         req1.status_code == 400 and req2.status_code == 400 and req3.status_code == 400
     )
 
+
 def test_providers_delete_should_return_404_not_found(client):
     req = client.delete(providers_endpoint, json={"id": 100})
     assert "not found" in req.get_json().get("message")
     assert req.status_code == 404
 
+
 def test_providers_delete_should_return_204_deleted(client):
     req = client.post(
         providers_endpoint,
-        json={"name": "Delete provider test", "description": "This provider will be deleted"},
+        json={
+            "name": "Delete provider test",
+            "description": "This provider will be deleted",
+        },
     )
     provider_id = req.get_json().get("id")
     req_del = client.delete(providers_endpoint, json={"id": provider_id})
     assert req_del.status_code == 204
+
 
 def test_providers_put_should_return_400_bad_request(client):
     """
@@ -104,6 +110,7 @@ def test_provider_put_should_return_404_not_found(client):
     )
     assert req.status_code == 404
 
+
 def test_provider_put_should_return_200_ok_altered(client):
     req1 = client.post(
         providers_endpoint,
@@ -125,6 +132,7 @@ def test_provider_put_should_return_200_ok_altered(client):
     assert req2.status_code == 200
     assert "x" in req2.get_json().get("name")
     assert "x" in req2.get_json().get("description")
+
 
 def test_providers_put_should_return_409_duplicated(client):
     """

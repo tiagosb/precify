@@ -73,7 +73,12 @@ class ProviderResource(Resource):
 
     def delete(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("id", type=int, required=True, help="Provider id should be a integer number.")
+        parser.add_argument(
+            "id",
+            type=int,
+            required=True,
+            help="Provider id should be a integer number.",
+        )
 
         args = parser.parse_args()
 
@@ -81,7 +86,7 @@ class ProviderResource(Resource):
 
         if not provider:
             abort(404, "Provider not found.")
-            
+
         try:
             db.session.delete(provider)
             db.session.commit()
@@ -89,18 +94,30 @@ class ProviderResource(Resource):
         except Exception as error:
             db.session.rollback()
             print(error)
-            abort(500, "Ops.. error, can't delete provider data. Please try again later.")
+            abort(
+                500, "Ops.. error, can't delete provider data. Please try again later."
+            )
 
     def put(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("id", type=int, required=True, help="Provider id should be a integer number.")
+        parser.add_argument(
+            "id",
+            type=int,
+            required=True,
+            help="Provider id should be a integer number.",
+        )
         parser.add_argument("name", help="Provider name should be a string type.")
-        parser.add_argument("description", help="Provider description should be a string type.")
+        parser.add_argument(
+            "description", help="Provider description should be a string type."
+        )
 
         args = parser.parse_args()
         if not (args["name"] or args["description"]):
-            abort(400, "Data is missing. You should inform new name/description to change.")
-         
+            abort(
+                400,
+                "Data is missing. You should inform new name/description to change.",
+            )
+
         provider = Provider.query.get(args["id"])
 
         if not provider:
@@ -110,13 +127,16 @@ class ProviderResource(Resource):
             provider.name = args["name"]
         if args["description"]:
             provider.description = args["description"]
-        
+
         try:
             db.session.commit()
             return self.schema.dump(provider, many=False), 200
         except IntegrityError:
             db.session.rollback()
-            abort(409, "Ops.. duplicated error, each provider should be unique. Found another provider with same name.")  
+            abort(
+                409,
+                "Ops.. duplicated error, each provider should be unique. Found another provider with same name.",
+            )
         except Exception as error:
             db.session.rollback()
             print(error)

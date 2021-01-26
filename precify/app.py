@@ -1,6 +1,6 @@
 # -*-encoding:utf-8-*-#
 from flask import Flask
-from .ext import database, serializer, admin, language
+from .ext import database, serializer, admin, language, commands
 from .api import api
 from .blueprints import views
 
@@ -17,4 +17,5 @@ def create_app():
     api.init_app(app)
     admin.init_app(app)
     language.init_app(app)
+    commands.init_app(app)
     return app
